@@ -1,0 +1,18 @@
+<div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+  <h1 class="text-2xl font-bold mb-4">Face Detection and Background Replacement</h1>
+  <div class="relative w-[300px] h-[300px] border-2 border-gray-300 rounded-md overflow-hidden">
+    <img src="/placeholder.svg" alt="Webcam feed" width="300" height="300" class="aspect-[1/1] object-cover" />
+    <div class="absolute inset-0 flex items-center justify-center">
+      <span class="text-lg font-semibold text-white">Webcam Feed</span>
+    </div>
+  </div>
+  <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 mt-4">
+    Take Photo
+  </button>
+  <div class="relative w-[300px] h-[300px] border-2 border-gray-300 rounded-md overflow-hidden mt-8">
+    <img src="/placeholder.svg" alt="Modified image" width="300" height="300" class="aspect-[1/1] object-cover" />
+    <div class="absolute inset-0 flex items-center justify-center">
+      <span class="text-lg font-semibold text-white">Modified Image</span>
+    </div>
+  </div>
+</div>
