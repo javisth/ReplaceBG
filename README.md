@@ -7,4 +7,4 @@ pip install backgroundremover \
 I run \
 backgroundremover -i "/path/to/image.jpeg" -m "u2net_human_seg" -o "output.png" to remove the backround. \
 \
-Next, I use the python script bg_replace.py to replace the background. \
+Next, I use the python script bg_replace.py to replace the background. 
