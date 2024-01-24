@@ -7,91 +7,93 @@
 </head>
 <body>
     <div class="page-container">
-
-
         <div class="content-container">
-    <!-- Background Selection Panel -->
-    <div id="backgroundPanel">
-        <h3>Choose Background</h3>
-        <img src="berlin/background1.jpg" class="backgroundOption" onclick="setBackground('background1.jpg')">
-        <img src="berlin/background2.jpg" class="backgroundOption" onclick="setBackground('background2.jpg')">
-        <img src="berlin/background3.jpg" class="backgroundOption" onclick="setBackground('background3.jpg')">
-        <img src="berlin/background4.jpg" class="backgroundOption" onclick="setBackground('background4.jpg')">
-        <img src="berlin/background5.jpg" class="backgroundOption" onclick="setBackground('background5.jpg')">
+            <!-- Background Selection Panel -->
+            <div id="backgroundPanel">
+                <h3>Choose Background</h3>
+                <img src="berlin/background1.jpg" class="backgroundOption" onclick="setBackground('background1.jpg')">
+                <img src="berlin/background2.jpg" class="backgroundOption" onclick="setBackground('background2.jpg')">
+                <img src="berlin/background3.jpg" class="backgroundOption" onclick="setBackground('background3.jpg')">
+                <img src="berlin/background4.jpg" class="backgroundOption" onclick="setBackground('background4.jpg')">
+                <img src="berlin/background5.jpg" class="backgroundOption" onclick="setBackground('background5.jpg')">
+                <!-- Add more backgrounds as needed -->
+            </div>
 
-        <!-- Add more backgrounds as needed -->
-    </div>
+            <!-- Webcam and Capture Button -->
+            <div id="my_camera" style="width:640px; height:480px;"></div>
+            <button id="captureButton">Capture</button>
+            <div id="results"></div>
+            <img id="resultImage" alt="Result Image" style="max-width: 100%;" />
+            <div id="qrCodeContainer" style="text-align: center; margin-top: 20px;">
+                <img id="qrCode" src="" alt="QR Code" style="max-width: 200px;"/>
+            </div>
 
-    <!-- Webcam and Capture Button -->
-    <div id="my_camera" style="width:640px; height:480px;"></div>
-    <button id="captureButton">Capture</button>
-    <div id="results"></div>
+            <script>
+                var selectedBackground = null;
 
-    <img id="resultImage" style="max-width: 100%;" />
+function setBackground(filename) {
+    selectedBackground = filename;
+    var backgrounds = document.getElementsByClassName('backgroundOption');
+    for (var i = 0; i < backgrounds.length; i++) {
+        backgrounds[i].style.border = '1px solid #000';
+    }
+    var selectedElement = document.querySelector(`img[src="berlin/${filename}"]`);
+    if (selectedElement) {
+        selectedElement.style.border = '3px solid red';
+    }
+}
 
-    <script>
-        var selectedBackground = null;
+Webcam.set({
+    width: 640,
+    height: 480,
+    image_format: 'jpeg',
+    jpeg_quality: 90
+});
+Webcam.attach('#my_camera');
 
-        function setBackground(filename) {
-            selectedBackground = filename;
-            var backgrounds = document.getElementsByClassName('backgroundOption');
-            for (var i = 0; i < backgrounds.length; i++) {
-                backgrounds[i].style.border = '1px solid #000';
-            }
-            var selectedElement = document.querySelector(`img[src="berlin/${filename}"]`);
-            if (selectedElement) {
-                selectedElement.style.border = '3px solid red';
-            }
-        }
+document.getElementById('captureButton').addEventListener('click', function() {
+    if (!selectedBackground) {
+        alert('Please select a background first.');
+        return;
+    }
 
-        Webcam.set({
-            width: 640,
-            height: 480,
-            image_format: 'jpeg',
-            jpeg_quality: 90
-        });
-        Webcam.attach('#my_camera');
+    Webcam.snap(function(data_uri) {
+        // Removed display of captured image
+        fetch(data_uri)
+            .then(res => res.blob())
+            .then(blob => {
+                var formData = new FormData();
+                formData.append('image', blob, 'capture.jpg');
+                formData.append('background', selectedBackground);
 
-        document.getElementById('captureButton').addEventListener('click', function() {
-            if (!selectedBackground) {
-                alert('Please select a background first.');
-                return;
-            }
-
-            Webcam.snap(function(data_uri) {
-            document.getElementById('results').innerHTML = '<img src="' + data_uri + '"/>';
-
-            fetch(data_uri)
-                .then(res => res.blob())
-                .then(blob => {
-                    var formData = new FormData();
-                    formData.append('image', blob, 'capture.jpg');
-                    formData.append('background', selectedBackground);
-
-                    fetch('http://localhost:5000/remove-background', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok ' + response.statusText);
-                        }
-                        return response.blob();
-                    })
-                    .then(blob => {
-                        var imageUrl = URL.createObjectURL(blob);
-                        document.getElementById('resultImage').src = imageUrl;
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
+                fetch('http://localhost:5000/remove-background', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())  // Expecting JSON response
+                .then(data => {
+                    console.log("This is my image:", data.imageUrl);
+                    console.log("This is my qr image:", data.qrCodeDataUrl);
+                    document.getElementById('resultImage').src = data.imageUrl;  // Display the processed image
+                    displayDownloadQrCode(data.qrCodeDataUrl);  // Display the download QR code
+                })
+                .catch(error => {
+                    console.error('Error:', error);
                 });
             });
-        });
+    });
+});
 
-    </script>
+function displayDownloadQrCode(qrCodeDataUrl) {
+    document.getElementById('qrCode').src = qrCodeDataUrl;
+    document.getElementById('qrCodeContainer').style.display = 'block';
+}
+
+
+            </script>
         </div>
     </div>
 </body>
 </html>
+
 
