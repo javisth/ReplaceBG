@@ -1,16 +1,27 @@
+
 body {
-    font-family: "Arial", sans-serif;
+    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;
+    justify-content: center;
+    background-color: #f4f4f4; /* Soft background color */
 }
 
-#my_camera, #results, #resultImage {
-    max-width: 100%;
-    height: auto;
+h1, h3 {
+    color: #333; /* Dark text for contrast */
+    margin: 20px;
+}
+
+#backgroundPanel, #my_camera, #results {
+    border: 2px solid #ccc; /* Adding borders */
+    padding: 15px;
+    margin: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Soft shadow for depth */
+    width: 80%; /* Adjust width as needed */
+    max-width: 640px; /* Maximum width */
 }
 
 .backgroundOption {
@@ -19,20 +30,30 @@ body {
     margin: 5px;
     border: 1px solid #000;
     cursor: pointer;
+    transition: transform 0.3s ease;
 }
 
 .backgroundOption:hover {
     border-color: blue;
+    transform: scale(1.1); /* Slightly enlarge on hover */
 }
 
-#backgroundPanel {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 20px;
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #007bff; /* Bootstrap primary color */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
 }
 
-/* Responsive design for smaller screens */
+button:hover {
+    background-color: #0056b3; /* Darken color on hover */
+}
+
 @media (max-width: 768px) {
     #my_camera, #results {
         width: 90%;
@@ -51,24 +72,23 @@ body {
     }
 }
 
-.page-container {
-    display: flex;
-    align-items: start;
+/* Hide the logo container */
+.logo-container {
+    display: none;
 }
 
-.logo-container {
-    flex: 0 0 auto; /* Adjust width as needed */
-    padding: 10px; /* Spacing around the logo */
+.page-container {
+    display: flex;
+    flex-direction: column;
 }
 
 .content-container {
-    flex: 1; /* Takes up the remaining space */
-    padding: 10px; /* Spacing around the content */
+    flex: 1;
+    width: 100%;
 }
 
 #logo {
-    max-width: 100%; /* Adjust logo size */
-    height: auto; /* Maintain aspect ratio */
+    max-height: 60px; /* Adjust logo size */
 }
 
 @media (max-width: 600px) {
@@ -77,7 +97,6 @@ body {
         left: 50%;
         top: 10px;
         transform: translateX(-50%);
-        max-height: 60px;
     }
 }
 
@@ -85,9 +104,10 @@ body {
     .page-container {
         flex-direction: column;
     }
+
     .logo-container, .content-container {
-        flex: 0 0 auto;
         width: 100%;
     }
 }
+
 
