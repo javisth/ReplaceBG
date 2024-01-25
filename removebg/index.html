@@ -66,7 +66,7 @@ document.getElementById('captureButton').addEventListener('click', function() {
                 formData.append('image', blob, 'capture.jpg');
                 formData.append('background', selectedBackground);
 
-                fetch('http://localhost:5000/remove-background', {
+                fetch('/remove-background', {
                     method: 'POST',
                     body: formData
                 })
